@@ -67,9 +67,53 @@ loaded
     worldCopyJump: false,
   })
 
-  L.tileLayer.provider('Stamen.Watercolor').addTo(map);
+    var defaultBase = L.tileLayer.provider('Stamen.TonerLite').addTo(map);
+
+    //Using a relative url to call layer instead of http
+    var CantonesIndivLayer = L.tileLayer.wms('http://geomapa.tk:8080/geoserver/costarica-snit/wms?', {
+        layers: 'Cantones_de_Costa_Rica',
+        format: 'image/png',
+        opacity: 0.5,
+        tiled: 'true'
+    });
+
+    var options = {
+        transparent: 'true',
+        format: 'image/png',
+        opacity: 0.5,
+        tiled: 'true'
+        //info_format: 'text/html'
+    };
+
+
+    //Load OSM Buildings then disable it on first load; can only be viewed at certain scales
+    var osmb = new OSMBuildings(map).load();
+    map.removeLayer(osmb);
+
+    //Overlay grouped layers    
+    var groupOverLays = {
+        "DTA": {
+            "EJEMPLO INDIVIDUAL": CantonesIndivLayer,
+        },
+    };
+
+
+    var baseLayers = {
+        'Stamen Toner': defaultBase,
+        'USGS TNM': L.tileLayer.provider('USGSTNM'),
+        'ESRI Imagery': L.tileLayer.provider('Esri.WorldImagery'),
+        'ESRI Ocean Basemap': L.tileLayer.provider('Esri.OceanBasemap'),
+        'OSM Topo': L.tileLayer.provider('OpenTopoMap')
+    };
+
+
+  L.tileLayer.provider('OpenStreetMap').addTo(map);
 
   setMapViewFromUrl(map, new URL(window.location.href))
+
+  //add layer switch control
+  L.control.groupedLayers(baseLayers, groupOverLays).addTo(map);
+  
 
   zoomedOrMoved(map, e => {
     const location = map.getCenter()
@@ -94,10 +138,11 @@ loaded
   })
   map.addLayer(tileLayer)
 
+/*
   loadButton.addEventListener('click', e => {
     tileLayer.setParams({layers: getLayers()})
   })
-  
+*/  
   window.addEventListener('popstate', e => {
     const url = new URL(e.state.path)
     setMapViewFromUrl(map, url)

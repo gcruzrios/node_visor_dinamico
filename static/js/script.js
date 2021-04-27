@@ -23,6 +23,9 @@ function setMapViewFromUrl(map, url) {
   return map.setView(L.latLng(lat, lng), zoomlevel)
 }
 
+
+var globalLayers = [];
+
 loaded
 .then(_ => xhrGET('/geoserver/wms?service=wms&request=GetCapabilities&version=1.3.0'))
 .then(result => {
@@ -34,6 +37,7 @@ loaded
       name: node.querySelector('Name').innerHTML
     })
   })
+  globalLayers = model;
   return model 
 }).then(optionModels => {
   // set all options from our loaded geoserver layers
@@ -70,6 +74,17 @@ loaded
   L.tileLayer.provider('OpenStreetMap').addTo(map);
 
   setMapViewFromUrl(map, new URL(window.location.href))
+
+
+  const baseLayers = {
+    //'OpenStreetMap': defaultBase,
+    'USGS TNM': L.tileLayer.provider('USGSTNM'),
+    'ESRI Imagery': L.tileLayer.provider('Esri.WorldImagery'),
+    'ESRI Ocean Basemap': L.tileLayer.provider('Esri.OceanBasemap'),
+    'OSM Topo': L.tileLayer.provider('OpenTopoMap')
+  };
+
+  L.control.groupedLayers(baseLayers, globalLayers).addTo(map);
 
   zoomedOrMoved(map, e => {
     const location = map.getCenter()
