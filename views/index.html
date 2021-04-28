@@ -93,6 +93,8 @@
           return map.setView(L.latLng(lat, lng), zoomlevel)
         }
 
+        //var geoserver_url = "";
+
 
         var globalLayers = [];
 
@@ -148,6 +150,7 @@
 
           const baseLayers = {
             //'OpenStreetMap': defaultBase,
+            'OpenStreetMap': L.tileLayer.provider('OpenStreetMap'),
             'USGS TNM': L.tileLayer.provider('USGSTNM'),
             'ESRI Imagery': L.tileLayer.provider('Esri.WorldImagery'),
             'ESRI Ocean Basemap': L.tileLayer.provider('Esri.OceanBasemap'),
@@ -163,27 +166,50 @@
             //info_format: 'text/html'
         };
         //Using a relative url to call layer instead of http
+        
         var source = L.WMS.source('http://geomapa.tk:8080/geoserver/costarica-snit/wms?', options);
-        var CantonesLayer = source.getLayer('costarica-snit:Cantones_de_Costa_Rica');
-        var DistritosLayer = source.getLayer('costarica-snit:Distritos_de_Costa_Rica');
-        var ProvinciasLayer = source.getLayer('costarica-snit:Provincias_de_Costa_Rica');
+       
+        var source2 = L.WMS.source('http://18.218.14.134:8080/geoserver/CENIGA/wms?', options);
+
+        //
+        //console.log(source)
+        //var CantonesLayer = source.getLayer('costarica-snit:Cantones_de_Costa_Rica');
+        //var DistritosLayer = source.getLayer('costarica-snit:Distritos_de_Costa_Rica');
+        //var ProvinciasLayer = source.getLayer('costarica-snit:Provincias_de_Costa_Rica');
            
         var groupOverLays = {
             "DTA": {
-                "Cantones": CantonesLayer,
-                "Distritos": DistritosLayer,
-                "Provincias": ProvinciasLayer,
+          //      "Cantones": CantonesLayer,
+          //      "Distritos": DistritosLayer,
+          //      "Provincias": ProvinciasLayer,
+                "Cantones": source.getLayer('costarica-snit:Cantones_de_Costa_Rica'),
+                "Distritos": source.getLayer('costarica-snit:Distritos_de_Costa_Rica'),
+                "Provincias": source.getLayer('costarica-snit:Provincias_de_Costa_Rica'),
+          
             },
         };
 
+        //console.log(groupOverLays.DTA.Cantones);
+        console.log(groupOverLays)
+        
 
-        const layer_list = {}
+        //source = L.WMS.source('/geoserver/wms?',options);
+        //console.log(source);
+        const layer_list = {"DTA":{}}
 
         globalLayers.forEach((layer) => {
-            console.log(layer.title+": "+layer.name);
+
+            url = `source2.getLayer('${layer.name}')`;
+            //console.log(url);
+
+            
+            Object.defineProperty(layer_list.DTA,`${layer.title}`,{value: source2.getLayer(`${ layer.name }`)})
         });
 
-          L.control.groupedLayers(baseLayers, groupOverLays).addTo(map);
+         console.log(layer_list);
+
+         L.control.groupedLayers(baseLayers, groupOverLays).addTo(map);
+         L.control.groupedLayers(baseLayers, layer_list).addTo(map);
 
           zoomedOrMoved(map, e => {
             const location = map.getCenter()
@@ -279,3 +305,4 @@
 
   </body>
 </html>
+
