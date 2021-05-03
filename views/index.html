@@ -56,18 +56,19 @@
   <body>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-3" id="controls">
+        <div class="col-2" id="controls">
           <select name="layer-options" id="layers-selection" multiple></select>
           <input id="layer-input" type="text" diabled=true name="layers" value=""> <br/>
           <button id="loadButton" type="button" name="button">Re Load tiles</button>
-        </div>
-        <div class="col-9" id="my-map" style="height:100vh; width: 100vw;"></div>
+        </div> 
+        <div class="col-10" id="my-map" style="height:100vh; width: 100vw;"></div>
       </div>
     </div>
     <!--<script src="/demo/static/js/leaflet-src.js"></script>
     <script src="/demo/static/js/leaflet-providers.js"></script>
     <script src="/demo/static/js/script.js"></script> -->
     <script>
+       
        function getLayers () {
           return document.getElementById('layer-input').value
         }
@@ -161,67 +162,38 @@
         var options = {
             transparent: 'true',
             format: 'image/png',
-            opacity: 0.5,
+            opacity: 0.8,
             tiled: 'true'
             //info_format: 'text/html'
         };
         //Using a relative url to call layer instead of http
         
-        var source = L.WMS.source('http://geomapa.tk:8080/geoserver/costarica-snit/wms?', options);
-       
-        var source2 = L.WMS.source('http://18.218.14.134:8080/geoserver/CENIGA/wms?', options);
+            
+        var source = L.WMS.source('http://18.218.14.134:8080/geoserver/wms?', options);
 
         //
-        //console.log(source)
-        //var CantonesLayer = source.getLayer('costarica-snit:Cantones_de_Costa_Rica');
-        //var DistritosLayer = source.getLayer('costarica-snit:Distritos_de_Costa_Rica');
-        //var ProvinciasLayer = source.getLayer('costarica-snit:Provincias_de_Costa_Rica');
+        
            
         var groupOverLays = {
             "DTA": {
-          //      "Cantones": CantonesLayer,
-          //      "Distritos": DistritosLayer,
-          //      "Provincias": ProvinciasLayer,
-                "Cantones": source.getLayer('costarica-snit:Cantones_de_Costa_Rica'),
-                "Distritos": source.getLayer('costarica-snit:Distritos_de_Costa_Rica'),
-                "Provincias": source.getLayer('costarica-snit:Provincias_de_Costa_Rica'),
-          
+                     
             },
         };
 
-
-        
-           
-        var groupOverLays2 = {
-            "DTA": {
-                
-            },
-        };
-
-        console.log(groupOverLays)
-        //source = L.WMS.source('/geoserver/wms?',options);
-        //console.log(source);
         const layer_list = {"DTA":{}}
 
         globalLayers.forEach((layer) => {
-            //url = `source2.getLayer('${layer.name}')`;
-            //console.log(url);
             
-            groupOverLays2.DTA[`${layer.title}`]= source2.getLayer(`${ layer.name }`)
-
-                       
+            groupOverLays.DTA[`${layer.title}`]= source.getLayer(`${ layer.name }`)
+                     
             //Object.defineProperty(layer_list.DTA,`${layer.title}`,{value: source2.getLayer(`${ layer.name }`)})
         });
 
-        //console.log(layer_list);
-
-        console.log(groupOverLays2);
 
          L.control.groupedLayers(baseLayers, groupOverLays).addTo(map);
-         L.control.groupedLayers(baseLayers, groupOverLays2).addTo(map);
          
          
-         //L.control.groupedLayers(baseLayers, layer_list).addTo(map);
+        
 
           zoomedOrMoved(map, e => {
             const location = map.getCenter()
