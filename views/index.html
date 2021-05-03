@@ -189,27 +189,39 @@
             },
         };
 
-        //console.log(groupOverLays.DTA.Cantones);
-        console.log(groupOverLays)
-        
 
+        
+           
+        var groupOverLays2 = {
+            "DTA": {
+                
+            },
+        };
+
+        console.log(groupOverLays)
         //source = L.WMS.source('/geoserver/wms?',options);
         //console.log(source);
         const layer_list = {"DTA":{}}
 
         globalLayers.forEach((layer) => {
-
-            url = `source2.getLayer('${layer.name}')`;
+            //url = `source2.getLayer('${layer.name}')`;
             //console.log(url);
-
             
-            Object.defineProperty(layer_list.DTA,`${layer.title}`,{value: source2.getLayer(`${ layer.name }`)})
+            groupOverLays2.DTA[`${layer.title}`]= source2.getLayer(`${ layer.name }`)
+
+                       
+            //Object.defineProperty(layer_list.DTA,`${layer.title}`,{value: source2.getLayer(`${ layer.name }`)})
         });
 
-         console.log(layer_list);
+        //console.log(layer_list);
+
+        console.log(groupOverLays2);
 
          L.control.groupedLayers(baseLayers, groupOverLays).addTo(map);
-         L.control.groupedLayers(baseLayers, layer_list).addTo(map);
+         L.control.groupedLayers(baseLayers, groupOverLays2).addTo(map);
+         
+         
+         //L.control.groupedLayers(baseLayers, layer_list).addTo(map);
 
           zoomedOrMoved(map, e => {
             const location = map.getCenter()
