@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Compose WMS layers in leaflet</title>
+    <title>Visor Geoespacial SINIA Ceniga</title>
     <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" /> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 
@@ -133,8 +133,7 @@
             //document.getElementById('layer-input').value = selected.join(',')
           //})
           
-          //const loadButton = document.getElementById("loadButton") 
-
+          //const loadButton = document.getElementById("loadButton")  
           
           const tileLayer = L.tileLayer.wms('/geoserver/wms', {
             layers: getLayers(),
@@ -199,8 +198,45 @@
 
          L.control.groupedLayers(baseLayers, groupOverLays).addTo(map);
          
-         
+         //add scale bar to map
+        L.control.scale({
+            position: 'bottomleft'
+        }).addTo(map);
         
+        var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+        });
+
+        const miniMap = new L.Control.MiniMap(Esri_WorldTopoMap, {
+            toggleDisplay: true,
+            minimized: false,
+            position: 'bottomleft'
+        }).addTo(map);
+
+        //define Drawing toolbar options
+        var options = {
+            position: 'topleft', // toolbar position, options are 'topleft', 'topright', 'bottomleft', 'bottomright'
+            drawMarker: true, // adds button to draw markers
+            drawPolyline: true, // adds button to draw a polyline
+            drawRectangle: true, // adds button to draw a rectangle
+            drawPolygon: true, // adds button to draw a polygon
+            drawCircle: true, // adds button to draw a cricle
+            cutPolygon: true, // adds button to cut a hole in a polygon
+            editMode: true, // adds button to toggle edit mode for all layers
+            removalMode: true, // adds a button to remove layers
+        };
+
+        // add leaflet.pm controls to the map
+        map.pm.addControls(options);
+
+        //Logo position: bottomright
+        var credctrl = L.controlCredits({
+            image: "/demo/static/Images/opengislab_106x23.png",
+            link: "https://www.opengislab.com/",
+            text: "Leaflet map example by Stephanie @ <u>opengislab.com<u/>"
+        }).addTo(map);
+
+
 
           zoomedOrMoved(map, e => {
             const location = map.getCenter()
