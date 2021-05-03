@@ -72,7 +72,7 @@
                   <img class="logo icon-ceniga" src="/demo/static/Images/CENIGA_LogoBlanco.png" alt="icon"/>
               </div>
           </div>
-          <!--
+         
           <div class="meta-bar">
               <div style="align-self: center;">
                   Latitud: <input type="text" name="lat" id="lat"/>
@@ -83,7 +83,7 @@
                   <h2>Metadatos</h2>
               </a>
           </div>
-          -->
+         
       
       
       </div>
@@ -96,7 +96,7 @@
         
 
 
-        <div class="col-12" id="my-map" style="height:90vh; width: 100vw;" ></div>
+        <div class="col-12" id="my-map" style="height:87vh; width: 100vw;" ></div>
       </div>
     </div>
     <!--
@@ -126,7 +126,7 @@
         }
 
         function setMapViewFromUrl(map, url) {
-          const lat = url.searchParams.get('lat') || 10
+          const lat = url.searchParams.get('lat') || 9.5
           const lng = url.searchParams.get('lng') || -84
           const zoomlevel = url.searchParams.get('z') || 8
           return map.setView(L.latLng(lat, lng), zoomlevel)
@@ -268,6 +268,20 @@
             link: "https://www.geoinn.com/",
             text: "Leaflet map example by Stephanie @ <u>opengislab.com<u/>"
         }).addTo(map);
+
+
+        var button  = document.getElementById("button-play");
+        button.addEventListener('click', run)
+        //console.log("Se hizo click en button play");
+
+        function run(){
+            var zoom = 12;
+            var lat = document.getElementById("lat").value;
+            var lng = document.getElementById("lng").value;
+
+            var marker = L.marker([lat, lng],{}).addTo(map);
+            map.flyTo([lat, lng], zoom);
+        }
 
 
 

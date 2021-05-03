@@ -43,6 +43,8 @@ body {
 .meta-bar {
     background-color: #ccc;
     margin: 0;
+    width: 100%;
+    justify-content: space-between;
 
 }
 
