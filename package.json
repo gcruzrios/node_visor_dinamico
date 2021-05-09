@@ -4,6 +4,7 @@
   "description": "Proxy requests to geoserver so we can access crossdomain",
   "main": "index.js",
   "scripts": {
+    "start":"node index.js",
     "run": "node index.js",
     "build": "./scripts/build.sh",
     "test": "exit 1"
