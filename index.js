@@ -10,11 +10,11 @@ const geoserverProxy = {
   }
 }
 
-//app.use('/geoserver/wms', proxy('http://18.218.14.134:8080/geoserver/CENIGA/wms', geoserverProxy))
-//app.use('/geoserver/wfs', proxy('http://18.218.14.134:8080/geoserver/CENIGA/wfs', geoserverProxy))
+app.use('/geoserver/wms', proxy('http://18.218.14.134:8080/geoserver/CENIGA/wms', geoserverProxy))
+app.use('/geoserver/wfs', proxy('http://18.218.14.134:8080/geoserver/CENIGA/wfs', geoserverProxy))
 
-app.use('/geoserver/wms', proxy('http://geomapa.tk:8080/geoserver/costarica-snit/wms', geoserverProxy))
-app.use('/geoserver/wfs', proxy('http://geomapa.tk:8080/geoserver/costarica-snit/wfs', geoserverProxy))
+//app.use('/geoserver/wms', proxy('http://geomapa.tk:8080/geoserver/costarica-snit/wms', geoserverProxy))
+//app.use('/geoserver/wfs', proxy('http://geomapa.tk:8080/geoserver/costarica-snit/wfs', geoserverProxy))
 
 
 app.use('/demo/static', express.static('static'))
